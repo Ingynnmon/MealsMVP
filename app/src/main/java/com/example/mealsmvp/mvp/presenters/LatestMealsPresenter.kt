@@ -19,6 +19,16 @@ class LatestMealsPresenter constructor(val mView: LatestMealView) : BasePresente
         MealModel.getInstance().getLatestMeals()
     }
 
+   fun startLoadingSearchMeals(searchValue : String) {
+        mView.showLoading()
+        MealModel.getInstance().getSearchMeals(searchValue)
+    }
+
+    fun startLoadingDetailMeals(identity : String) {
+        mView.showLoading()
+        MealModel.getInstance().getDetailMeals(identity)
+    }
+
     override fun onStop() {
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this)

@@ -8,6 +8,7 @@ import android.widget.Toast
 import com.example.mealsmvp.R
 import com.example.mealsmvp.mvp.presenters.LatestMealsPresenter
 import com.example.mealsmvp.mvp.views.LatestMealView
+import com.example.mealsmvp.ui.adapters.ItemClickListener
 import com.example.mealsmvp.ui.adapters.MealAdapter
 import com.example.mealsmvp.vos.Meal
 import kotlinx.android.synthetic.main.activity_main.*
@@ -26,7 +27,17 @@ class MainActivity : AppCompatActivity(), LatestMealView {
         mPresenter = LatestMealsPresenter(this)
         mPresenter.startLoadingLatestMeals()
 
-        mAdapter = MealAdapter(this)
+        mAdapter = MealAdapter(this,object : ItemClickListener {
+            override fun onItemClicked(id: String) {
+                //To DetailActivity with id Data
+                val intent = Intent(applicationContext, DetailActivity::class.java)
+                intent.putExtra("id", id)
+                Toast.makeText(applicationContext, id, Toast.LENGTH_SHORT).show()
+
+                startActivity(intent)
+            }
+
+        })
         recyclerViewMeal.adapter = mAdapter
         recyclerViewMeal.setHasFixedSize(true)
         recyclerViewMeal.layoutManager = GridLayoutManager(this,2)
@@ -39,6 +50,8 @@ class MainActivity : AppCompatActivity(), LatestMealView {
             val intent = Intent(this, SearchActivity::class.java)
             startActivity(intent)
         }
+
+        mPresenter.startLoadingDetailMeals(identity = "id")
 
     }
 

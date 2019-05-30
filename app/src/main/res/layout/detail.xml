@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <ImageView
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@mipmap/ic_launcher"
+                android:id="@+id/iview"
+                android:scaleType="centerCrop"/>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Text name"
+                android:background="#B3000000"
+                android:textSize="15sp"
+                android:textColor="@android:color/white"
+                android:id="@+id/tview"
+                android:gravity="center_horizontal"
+                android:layout_below="@id/iview"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/instructiondetail"
+                android:layout_below="@id/tview"
+                />
+
+    </RelativeLayout>
+</ScrollView>

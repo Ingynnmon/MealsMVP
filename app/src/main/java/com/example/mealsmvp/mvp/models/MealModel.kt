@@ -18,7 +18,11 @@ class MealModel {
         MealDataAgentImpl.getInstance().getLatestMeals()
     }
 
-    fun getSearchMeals() {
-        MealDataAgentImpl.getInstance().getSearchMeals()
+    fun getSearchMeals(searchValue : String) {
+        MealDataAgentImpl.getInstance().getSearchMeals(searchValue)
+    }
+
+    fun getDetailMeals(identity : String) {
+        MealDataAgentImpl.getInstance().getDetailMeals(identity)
     }
 }

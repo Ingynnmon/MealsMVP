@@ -13,5 +13,5 @@ interface MealApi {
     fun getSearchMeals(@Query("s") keyword : String): Call<LatestMealResponse>
 
     @GET("api/json/v1/1/lookup.php")
-    fun getDetailbyId(@Query("i") keyword: String): Call<LatestMealResponse>
+    fun getDetailMeals(@Query("i") keyword: String): Call<LatestMealResponse>
 }

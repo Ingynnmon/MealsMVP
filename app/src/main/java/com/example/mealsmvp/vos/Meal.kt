@@ -12,6 +12,9 @@ class Meal{
     @SerializedName("strMealThumb")
     val image:String?=null
 
+    @SerializedName("strInstructions")
+    val instruction:String?=null
+
     @SerializedName("strTags")
     val tag:String?=null
 }

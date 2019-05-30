@@ -9,14 +9,15 @@ import com.example.mealsmvp.R
 import com.example.mealsmvp.ui.viewholders.MealViewHolder
 import com.example.mealsmvp.vos.Meal
 
-class MealAdapter(val context: Context): RecyclerView.Adapter<MealViewHolder>(){
+class MealAdapter(val context: Context,private val itemClickListener: ItemClickListener)
+    : RecyclerView.Adapter<MealViewHolder>(){
 
     private var mMeal: List<Meal> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): MealViewHolder {
         val view = LayoutInflater.from(context)
             .inflate(R.layout.card, parent, false)
-        return MealViewHolder(view)
+        return MealViewHolder(view,itemClickListener)
     }
 
     override fun getItemCount(): Int {

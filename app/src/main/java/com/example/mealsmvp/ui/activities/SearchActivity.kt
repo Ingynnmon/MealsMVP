@@ -1,24 +1,25 @@
 package com.example.mealsmvp.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.widget.EditText
 import android.widget.Toast
 import com.example.mealsmvp.R
-import com.example.mealsmvp.mvp.presenters.SearchMealsPresenter
-import com.example.mealsmvp.mvp.views.SearchMealView
+import com.example.mealsmvp.mvp.presenters.LatestMealsPresenter
+import com.example.mealsmvp.mvp.views.LatestMealView
+import com.example.mealsmvp.ui.adapters.ItemClickListener
 import com.example.mealsmvp.ui.adapters.MealAdapter
 import com.example.mealsmvp.vos.Meal
-import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.search.*
 
-class SearchActivity : AppCompatActivity(),SearchMealView {
+class SearchActivity : AppCompatActivity(), LatestMealView {
 
 
     private lateinit var mAdapter: MealAdapter
-    private lateinit var mPresenter: SearchMealsPresenter
-    public lateinit var name: EditText
+    private lateinit var mPresenter: LatestMealsPresenter
+    private lateinit var name: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,26 +27,34 @@ class SearchActivity : AppCompatActivity(),SearchMealView {
         //setSupportActionBar(toolbar)
 
         name=findViewById(R.id.mealName)
-        mPresenter = SearchMealsPresenter(this)
-        mPresenter.startLoadingSearchMeals()
+        mPresenter = LatestMealsPresenter(this)
+        mPresenter.startLoadingLatestMeals()
 
-        mAdapter = MealAdapter(this)
+        mAdapter = MealAdapter(this,object : ItemClickListener{
+            override fun onItemClicked(id: String) {
+                //To DetailActivity with id Data
+                val intent = Intent(applicationContext, DetailActivity::class.java)
+                intent.putExtra("id", id)
+                startActivity(intent)
+            }
+
+        })
         recyclerViewSearch.adapter = mAdapter
         recyclerViewSearch.setHasFixedSize(true)
         recyclerViewSearch.layoutManager = GridLayoutManager(this,2)
 
         swipeRefresh2.setOnRefreshListener {
-            mPresenter.startLoadingSearchMeals()
+            val searchValue = name.text.toString()
+            mPresenter.startLoadingSearchMeals(searchValue)
         }
 
         searchMeal.setOnClickListener{
 
-            /*val i = Intent(this,MealDataAgentImpl::class.java)
-            i.putExtra("myExtra", name.text.toString())
-            startActivity(i)*/
-
-            mPresenter.startLoadingSearchMeals()
+            val searchValue = name.text.toString()
+            mPresenter.startLoadingSearchMeals(searchValue)
         }
+
+        mPresenter.startLoadingDetailMeals(identity = "id")
     }
 
 
