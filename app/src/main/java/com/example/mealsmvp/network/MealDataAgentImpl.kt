@@ -2,7 +2,9 @@ package com.example.mealsmvp.network
 
 import android.content.Intent
 import com.example.mealsmvp.events.RestApiEvents
+import com.example.mealsmvp.network.responses.DetailMealResponse
 import com.example.mealsmvp.network.responses.LatestMealResponse
+import com.example.mealsmvp.network.responses.SearchMealResponse
 import com.example.mealsmvp.ui.utils.AppConstants
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
@@ -33,12 +35,6 @@ class MealDataAgentImpl private constructor() : MealDataAgent{
     }
 
     init {
-
-        /*val myIntent:Intent?=null
-        if (myIntent!!.hasExtra("myExtra")) {
-            str=myIntent!!.getStringExtra("myExtra")
-        }*/
-
         val okHttpClient = OkHttpClient
             .Builder()
             .connectTimeout(60,TimeUnit.SECONDS)
@@ -88,8 +84,8 @@ class MealDataAgentImpl private constructor() : MealDataAgent{
 ///////Search Meals /////////
     override fun getSearchMeals(searchValue : String) {
 
-        mealApi.getSearchMeals(searchValue).enqueue(object : Callback<LatestMealResponse> {
-            override fun onFailure(call: Call<LatestMealResponse>, t: Throwable) {
+        mealApi.getSearchMeals(searchValue).enqueue(object : Callback<SearchMealResponse> {
+            override fun onFailure(call: Call<SearchMealResponse>, t: Throwable) {
                 EventBus.getDefault()
                     .post(
                         RestApiEvents.ErrorInvokingAPIEvent(
@@ -98,13 +94,13 @@ class MealDataAgentImpl private constructor() : MealDataAgent{
                     )
             }
 
-            override fun onResponse(call: Call<LatestMealResponse>, response: Response<LatestMealResponse>) {
-                val latestMealResponse = response.body()
-                if (latestMealResponse != null && latestMealResponse.meals.isNotEmpty()) {
+            override fun onResponse(call: Call<SearchMealResponse>, response: Response<SearchMealResponse>) {
+                val searchMealResponse = response.body()
+                if (searchMealResponse != null && searchMealResponse.meals.isNotEmpty()) {
                     EventBus.getDefault()
                         .post(
-                            RestApiEvents.LatestMealsDataLoadedEvent(
-                                latestMealResponse.meals
+                            RestApiEvents.SearchMealsDataLoadedEvent(
+                                searchMealResponse.meals
                             )
                         )
                 } else {
@@ -121,8 +117,8 @@ class MealDataAgentImpl private constructor() : MealDataAgent{
 //////Detail Meals //////////
      override fun getDetailMeals(identity : String) {
 
-        mealApi.getDetailMeals(identity).enqueue(object : Callback<LatestMealResponse> {
-            override fun onFailure(call: Call<LatestMealResponse>, t: Throwable) {
+        mealApi.getDetailMeals(identity).enqueue(object : Callback<DetailMealResponse> {
+            override fun onFailure(call: Call<DetailMealResponse>, t: Throwable) {
                 EventBus.getDefault()
                     .post(
                         RestApiEvents.ErrorInvokingAPIEvent(
@@ -131,13 +127,13 @@ class MealDataAgentImpl private constructor() : MealDataAgent{
                     )
             }
 
-            override fun onResponse(call: Call<LatestMealResponse>, response: Response<LatestMealResponse>) {
-                val latestMealResponse = response.body()
-                if (latestMealResponse != null && latestMealResponse.meals.isNotEmpty()) {
+            override fun onResponse(call: Call<DetailMealResponse>, response: Response<DetailMealResponse>) {
+                val detailMealResponse = response.body()
+                if (detailMealResponse != null && detailMealResponse.meals.isNotEmpty()) {
                     EventBus.getDefault()
                         .post(
-                            RestApiEvents.LatestMealsDataLoadedEvent(
-                                latestMealResponse.meals
+                            RestApiEvents.DetailMealsDataLoadedEvent(
+                                detailMealResponse.meals
                             )
                         )
                 } else {

@@ -6,4 +6,5 @@ object RestApiEvents {
     class ErrorInvokingAPIEvent(val message: String)
     class LatestMealsDataLoadedEvent(val meals: List<Meal>)
     class SearchMealsDataLoadedEvent(val meals: List<Meal>)
+    class DetailMealsDataLoadedEvent(val meals: List<Meal>)
 }

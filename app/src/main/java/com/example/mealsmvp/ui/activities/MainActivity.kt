@@ -4,6 +4,7 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
+import android.widget.GridLayout
 import android.widget.Toast
 import com.example.mealsmvp.R
 import com.example.mealsmvp.mvp.presenters.LatestMealsPresenter
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity(), LatestMealView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         //setSupportActionBar(toolbar)
+
         mPresenter = LatestMealsPresenter(this)
         mPresenter.startLoadingLatestMeals()
 
@@ -40,7 +42,7 @@ class MainActivity : AppCompatActivity(), LatestMealView {
         })
         recyclerViewMeal.adapter = mAdapter
         recyclerViewMeal.setHasFixedSize(true)
-        recyclerViewMeal.layoutManager = GridLayoutManager(this,2)
+        recyclerViewMeal.layoutManager = GridLayoutManager(this,2 , GridLayout.VERTICAL,false)
 
         swipeRefresh.setOnRefreshListener {
             mPresenter.startLoadingLatestMeals()
@@ -50,8 +52,6 @@ class MainActivity : AppCompatActivity(), LatestMealView {
             val intent = Intent(this, SearchActivity::class.java)
             startActivity(intent)
         }
-
-        mPresenter.startLoadingDetailMeals(identity = "id")
 
     }
 
@@ -78,6 +78,11 @@ class MainActivity : AppCompatActivity(), LatestMealView {
     override fun onStart() {
         super.onStart()
         mPresenter.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mPresenter.startLoadingLatestMeals()
     }
 
     override fun onStop() {

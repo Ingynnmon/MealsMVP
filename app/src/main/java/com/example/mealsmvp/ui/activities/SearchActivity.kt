@@ -5,20 +5,21 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.widget.EditText
+import android.widget.GridLayout
 import android.widget.Toast
 import com.example.mealsmvp.R
-import com.example.mealsmvp.mvp.presenters.LatestMealsPresenter
-import com.example.mealsmvp.mvp.views.LatestMealView
+import com.example.mealsmvp.mvp.presenters.SearchMealsPresenter
+import com.example.mealsmvp.mvp.views.SearchMealView
 import com.example.mealsmvp.ui.adapters.ItemClickListener
 import com.example.mealsmvp.ui.adapters.MealAdapter
 import com.example.mealsmvp.vos.Meal
 import kotlinx.android.synthetic.main.search.*
 
-class SearchActivity : AppCompatActivity(), LatestMealView {
+class SearchActivity : AppCompatActivity(), SearchMealView {
 
 
     private lateinit var mAdapter: MealAdapter
-    private lateinit var mPresenter: LatestMealsPresenter
+    private lateinit var mPresenter: SearchMealsPresenter
     private lateinit var name: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,8 +28,8 @@ class SearchActivity : AppCompatActivity(), LatestMealView {
         //setSupportActionBar(toolbar)
 
         name=findViewById(R.id.mealName)
-        mPresenter = LatestMealsPresenter(this)
-        mPresenter.startLoadingLatestMeals()
+        mPresenter = SearchMealsPresenter(this)
+        mPresenter.startLoadingSearchMeals(name.text.toString())
 
         mAdapter = MealAdapter(this,object : ItemClickListener{
             override fun onItemClicked(id: String) {
@@ -41,7 +42,7 @@ class SearchActivity : AppCompatActivity(), LatestMealView {
         })
         recyclerViewSearch.adapter = mAdapter
         recyclerViewSearch.setHasFixedSize(true)
-        recyclerViewSearch.layoutManager = GridLayoutManager(this,2)
+        recyclerViewSearch.layoutManager = GridLayoutManager(this,2, GridLayout.VERTICAL,false)
 
         swipeRefresh2.setOnRefreshListener {
             val searchValue = name.text.toString()
@@ -49,12 +50,9 @@ class SearchActivity : AppCompatActivity(), LatestMealView {
         }
 
         searchMeal.setOnClickListener{
-
             val searchValue = name.text.toString()
             mPresenter.startLoadingSearchMeals(searchValue)
         }
-
-        mPresenter.startLoadingDetailMeals(identity = "id")
     }
 
 
@@ -81,6 +79,11 @@ class SearchActivity : AppCompatActivity(), LatestMealView {
     override fun onStart() {
         super.onStart()
         mPresenter.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mPresenter.startLoadingSearchMeals(name.text.toString())
     }
 
     override fun onStop() {
